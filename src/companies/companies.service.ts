@@ -38,7 +38,7 @@ export class CompaniesService {
     return filteredObjects;
   }
 
-  async createCompanyWithLocation(item: any, queryRunner: any): Promise<boolean> {
+  async createCompanyWithLocation(item: any, queryRunner: any): Promise<any> {
     const company = await this.companyRepository.findOne({ where: { location_id: item.location_id } });
 
     if (company) {
@@ -48,10 +48,9 @@ export class CompaniesService {
       company.description = item.description;
       company.updated_at = new Date(item.updated_at * 1000);
       await queryRunner.manager.save(company);
-      await queryRunner.commitTransaction();
     }
-    console.log(company, 'companyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy')
-    return true
+
+    return queryRunner
   }
 
   @Cron('*/1 * * * *') // Chạy mỗi phút
@@ -60,21 +59,23 @@ export class CompaniesService {
       const response = await axios.get('https://669ce22d15704bb0e304842d.mockapi.io/assets');
       const data = response.data;
 
-      const existeDataWithLocation = await this.filterObjectsByExistingLocations(data)
-      const queryRunner = this.connection.createQueryRunner();
+      const filteredData = await this.filterObjectsByExistingLocations(data);
+
+      let queryRunner = this.connection.createQueryRunner();
       await queryRunner.startTransaction();
 
       try {
-        for (const item of existeDataWithLocation) {
-          await this.createCompanyWithLocation(item, queryRunner);
+        for (const item of filteredData) {
+          queryRunner = await this.createCompanyWithLocation(item, queryRunner);
         }
+
+        await queryRunner.commitTransaction();
       } catch (error) {
         await queryRunner.rollbackTransaction();
         throw error;
       } finally {
         await queryRunner.release();
       }
-
 
     } catch (error) {
       console.error('Error in cron job:', error);
