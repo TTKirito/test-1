@@ -82,6 +82,7 @@ export class DeviceService {
       }))
 
       await queryRunner.commitTransaction();
+      console.log(device, 'ok')
     } catch (error) {
       await queryRunner.rollbackTransaction();
       throw error;
