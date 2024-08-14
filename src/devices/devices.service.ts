@@ -49,8 +49,7 @@ export class DeviceService {
 
   async updateDeviceWithLocation(item: any): Promise<boolean> {
     const company = await this.companyRepository.find({ where: { location_id: item.location_id, status: CompanyStatus.ACTIVED } });
-
-    if (!company || company && company.length > 0) return;
+    if (!company || company && company.length === 0) return;
 
     let queryRunner = this.connection.createQueryRunner();
     await queryRunner.startTransaction();
