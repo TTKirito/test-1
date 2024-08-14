@@ -12,12 +12,12 @@ export class Location {
   @OneToOne(() => Company, company => company.location)
   company: Company;
 
-  @CreateDateColumn({ name: 'created_date' })
+  @CreateDateColumn({ name: 'created_at' })
   created_at?: Date;
 
-  @UpdateDateColumn({ name: 'modified_date' })
+  @UpdateDateColumn({ name: 'modified_at' })
   updated_at?: Date;
 
-  @DeleteDateColumn({ name: 'delete_date' })
+  @DeleteDateColumn({ name: 'delete_at' })
   delete_at?: Date;
 }

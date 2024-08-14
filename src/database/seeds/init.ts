@@ -7,7 +7,7 @@ import { CompanyStatus } from 'src/companies/utils/company-status.enum';
 
 @Injectable()
 export class LocationSeedService {
-  constructor(private readonly connection: Connection) {}
+  constructor(private readonly connection: Connection) { }
 
   async seed() {
     const locations: Partial<Location>[] = [
@@ -30,9 +30,13 @@ export class LocationSeedService {
     await queryRunner.startTransaction();
 
     try {
-      // await queryRunner.manager.save(Location, locations);
-      // await queryRunner.manager.save(Company, companies);
-      
+      const data = await queryRunner.manager.save(Location, locations);
+
+      if (data.length) {
+        await queryRunner.manager.save(Company, companies);
+      }
+
+
       await queryRunner.commitTransaction();
       console.log('done');
     } catch (error) {

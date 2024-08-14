@@ -1,15 +1,11 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToOne, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, PrimaryColumn, JoinColumn, ManyToMany, JoinTable } from 'typeorm';
-import { Location } from './locations.entities';
 import { CompanyStatus } from '../../companies/utils/company-status.enum';
-import { Device } from './device.entities';
+import { Company } from './company.entities';
 
-@Entity({ name: 'companies' })
-export class Company {
+@Entity({ name: 'devices' })
+export class Device {
     @PrimaryGeneratedColumn()
-    id: number;
-
-    @Column()
-    organization: string;
+    public id: number;
 
     @Column({
         type: 'enum',
@@ -18,13 +14,21 @@ export class Company {
     })
     status: CompanyStatus;
 
-    @Column({ type: 'int' })
-    location_id: number;
+    @Column({
+        nullable: true
+    })
+    type?: string;
 
-    @OneToOne(() => Location, { eager: true })
-    @JoinColumn({ name: 'location_id' })
-    location: Location;
+    @Column({
+        nullable: true
+    })
+    serial?: string;
 
+    @Column({
+        type: 'text',
+        nullable: true
+    })
+    description?: string;
 
     @CreateDateColumn({ name: 'created_at' })
     created_at?: Date;
@@ -35,18 +39,18 @@ export class Company {
     @DeleteDateColumn({ name: 'delete_at' })
     delete_at?: Date;
 
-    @ManyToMany(() => Device)
+    @ManyToMany(() => Company)
     @JoinTable({
         name: 'company_devices',
         joinColumn: {
-            name: 'company_id',
-            referencedColumnName: 'id',
-        },
-        inverseJoinColumn: {
             name: 'device_id',
             referencedColumnName: 'id',
         },
+        inverseJoinColumn: {
+            name: 'company_id',
+            referencedColumnName: 'id',
+        },
     })
-    devices: Device[];
+    companies: Company[];
 
 }

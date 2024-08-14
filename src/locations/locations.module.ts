@@ -4,10 +4,12 @@ import { LocationsController } from './locations.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Company } from 'src/database/entities/company.entities';
 import { Location } from 'src/database/entities/locations.entities';
+import { Device } from 'src/database/entities/device.entities';
+import { CompanyDevice } from 'src/database/entities/companyDevice.entities';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Company, Location]), 
+    TypeOrmModule.forFeature([Company, Location, Device, CompanyDevice]), 
   ],
   controllers: [LocationsController],
   providers: [LocationsService],

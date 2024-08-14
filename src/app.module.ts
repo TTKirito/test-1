@@ -8,6 +8,9 @@ import { Company } from './database/entities/company.entities';
 import { Location } from './database/entities/locations.entities';
 import { SeedsModule } from './database/seeds/seeds.module';
 import { LocationsModule } from './locations/locations.module';
+import { Device } from './database/entities/device.entities';
+import { CompanyDevice } from './database/entities/companyDevice.entities';
+import { DevicesModule } from './devices/devices.module';
 dotenv.config();
 
 const { port, host, username, password, dbname } = dbConfig();
@@ -22,13 +25,14 @@ const { port, host, username, password, dbname } = dbConfig();
       username,
       password,
       database: dbname,
-      entities: [Company, Location],
+      entities: [Company, Device, Location , CompanyDevice],
       migrations: ['./database/migrations/*.ts'],
-      synchronize: true, 
+      synchronize: false, 
     }),
     CompaniesModule,
     LocationsModule,
     SeedsModule, 
+    DevicesModule
   ],
   controllers: [],
   providers: [],
