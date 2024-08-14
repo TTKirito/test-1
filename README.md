@@ -42,6 +42,11 @@ $ docker-compose up -d
 $ npm run migrate-run
 ```
 
+```seed
+$ để seed data thì commit từng dòng để seed ạ, bởi vì em chưa có thời gian để tách em làm vậy cho nhanh ạ
+```
+![image](https://github.com/user-attachments/assets/9c6d9288-6775-456c-8fd7-aec8395e6d86)
+
 ```bash
 # development
 $ npm run start
