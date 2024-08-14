@@ -43,7 +43,7 @@ export class CompaniesService {
     await queryRunner.startTransaction();
 
     try {
-      const company = await this.companyRepository.findOne({ where: { id: item.id } });
+      const company = await this.companyRepository.findOne({ where: { location_id: item.location_id } });
 
       if (company) {
         company.type = item.type;
@@ -51,11 +51,11 @@ export class CompaniesService {
         company.status = item.status;
         company.description = item.description;
         company.updated_at = new Date(item.updated_at * 1000);
+        console.log(company, 'company')
+        await queryRunner.manager.save(company);
+        await queryRunner.commitTransaction();
       }
 
-      console.log(company, 'compalyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy')
-      await queryRunner.manager.save(company);
-      await queryRunner.commitTransaction();
       return true;
     } catch (error) {
       await queryRunner.rollbackTransaction();
