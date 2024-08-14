@@ -18,7 +18,7 @@ export class createTableCompany1723626484530 implements MigrationInterface {
                 location_id INT NOT NULL,
                 FOREIGN KEY (location_id) REFERENCES locations(id) ON DELETE SET NULL,
                 created_at TIMESTAMP NOT NULL DEFAULT NOW(), 
-                modified_at TIMESTAMP NOT NULL DEFAULT NOW(),
+                updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
                 delete_at TIMESTAMP DEFAULT NULL
             );
         `);
