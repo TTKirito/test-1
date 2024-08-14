@@ -38,31 +38,20 @@ export class CompaniesService {
     return filteredObjects;
   }
 
-  async createCompanyWithLocation(item: any): Promise<boolean> {
-    const queryRunner = this.connection.createQueryRunner();
-    await queryRunner.startTransaction();
+  async createCompanyWithLocation(item: any, queryRunner: any): Promise<boolean> {
+    const company = await this.companyRepository.findOne({ where: { location_id: item.location_id } });
 
-    try {
-      const company = await this.companyRepository.findOne({ where: { location_id: item.location_id } });
-
-      if (company) {
-        company.type = item.type;
-        company.serial = item.serial;
-        company.status = item.status;
-        company.description = item.description;
-        company.updated_at = new Date(item.updated_at * 1000);
-
-        await queryRunner.manager.save(company);
-        await queryRunner.commitTransaction();
-      }
-
-      return true;
-    } catch (error) {
-      await queryRunner.rollbackTransaction();
-      throw error;
-    } finally {
-      await queryRunner.release();
+    if (company) {
+      company.type = item.type;
+      company.serial = item.serial;
+      company.status = item.status;
+      company.description = item.description;
+      company.updated_at = new Date(item.updated_at * 1000);
+      await queryRunner.manager.save(company);
+      await queryRunner.commitTransaction();
     }
+    console.log(company, 'companyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy')
+    return true
   }
 
   @Cron('*/1 * * * *') // Chạy mỗi phút
@@ -72,10 +61,21 @@ export class CompaniesService {
       const data = response.data;
 
       const existeDataWithLocation = await this.filterObjectsByExistingLocations(data)
+      const queryRunner = this.connection.createQueryRunner();
+      await queryRunner.startTransaction();
 
-      for (const item of existeDataWithLocation) {
-        await this.createCompanyWithLocation(item);
+      try {
+        for (const item of existeDataWithLocation) {
+          await this.createCompanyWithLocation(item, queryRunner);
+        }
+      } catch (error) {
+        await queryRunner.rollbackTransaction();
+        throw error;
+      } finally {
+        await queryRunner.release();
       }
+
+
     } catch (error) {
       console.error('Error in cron job:', error);
     }
