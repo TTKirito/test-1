@@ -29,10 +29,18 @@
 ## Installation
 
 ```bash
-$ npm install
+$ npm install -f
 ```
 
 ## Running the app
+
+```docker postgresql
+$ docker-compose up -d
+```
+
+```migrate
+$ npm run migrate-run
+```
 
 ```bash
 # development

@@ -45,12 +45,7 @@ export class CompaniesService {
     try {
       const company = await this.companyRepository.findOne({ where: { location_id: item.location_id } });
 
-
       if (company) {
-        if (item.updated_at < new Date(company.updated_at).getTime() / 1000) {
-          return
-        }
-
         company.type = item.type;
         company.serial = item.serial;
         company.status = item.status;

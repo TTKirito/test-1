@@ -31,7 +31,7 @@ export class LocationSeedService {
 
     try {
       // await queryRunner.manager.save(Location, locations);
-      await queryRunner.manager.save(Company, companies);
+      // await queryRunner.manager.save(Company, companies);
       
       await queryRunner.commitTransaction();
       console.log('done');
